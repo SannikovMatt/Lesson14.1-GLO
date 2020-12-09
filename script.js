@@ -1,6 +1,8 @@
 'use strict';
 
 
+
+
 function DomElement(selector, height, width, bg, fontSize) {
 
 
@@ -10,8 +12,8 @@ function DomElement(selector, height, width, bg, fontSize) {
     this.width = width || '';
     this.bg = bg || '';
     this.fontSize = fontSize || '';
-    this.p= '';
-    this.div='';
+    this.elem = '';
+
 
 }
 
@@ -26,11 +28,15 @@ DomElement.prototype.create = function () {
                 `height : ${this.height}px; 
                 width : ${this.width}px ; 
             background : ${this.bg};
-            font-size : ${this.fontSize}px`;
+            font-size : ${this.fontSize}px ; transition: 0.05s`;
 
 
-            document.body.append(divClass);
-            this.div = divClass;
+            this.elem = divClass;
+            document.addEventListener('DOMContentLoaded', () => {
+
+                document.body.append(this.elem);
+
+            });
 
 
 
@@ -43,11 +49,43 @@ DomElement.prototype.create = function () {
                 width : ${this.width}px ; 
             background : ${this.bg};
             font-size : ${this.fontSize}px`;
-            document.body.append(pId);
-            this.p = pId;
+
+            this.elem = pId;
+
+            document.addEventListener('DOMContentLoaded', () => {
+
+                document.body.append(this.elem);
+            });
             break;
 
     }
+
+
+    document.addEventListener('keydown', (e) => {
+        let div = this.elem;
+    
+        switch (e.key) {
+            case 'ArrowUp':
+                if (parseInt(getComputedStyle(div).top) < 1) { break; }
+                div.style.top = parseInt(getComputedStyle(div).top) - 10 + 'px';
+                break;
+            case 'ArrowDown':
+                div.style.top = parseInt(getComputedStyle(div).top) + 10 + 'px';
+                break;
+            case 'ArrowLeft':
+                if (parseInt(getComputedStyle(div).left) < 1) { break; }
+                div.style.left = parseInt(getComputedStyle(div).left) - 10 + 'px';
+                break;
+            case 'ArrowRight':
+                div.style.left = parseInt(getComputedStyle(div).left) + 10 + 'px';
+                break;
+    
+    
+    
+    
+        }
+    
+    });
 
 
 
@@ -55,9 +93,13 @@ DomElement.prototype.create = function () {
 
 
 
-let elem = new DomElement('.block', 100, 100, 'purple', 25);
+let block = new DomElement('.block', 100, 100, 'purple', 25);
+block.create();
 
-elem.create();
+block.elem.style.position = 'absolute';
 
 
-elem.div.innerHTML = 'Text';
+
+
+
+
